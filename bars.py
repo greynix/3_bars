@@ -10,7 +10,7 @@ def load_data(path):
     if not os.path.exists(path):
         raise FileNotFoundError('json file not found, please set correct file')   
     with open(path, encoding='cp1251') as json_file:
-            return json.load(json_file)
+        return json.load(json_file)
 
 def get_biggest_bar(data):
     """Some python magic"""
