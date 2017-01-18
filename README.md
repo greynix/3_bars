@@ -20,7 +20,7 @@ $ python bars.py # possibly requires call of python3 executive instead of just p
 ```#!bash
 
 -h       # вывод помощи 
--json_file # путь к json файлу, по умолчанию data.json
+json_file # путь к json файлу, по умолчанию data.json
 biggest  # для поиска бара с наибольшим колличеством посадочных мест
 smallest # для поиска бара с наименьшим колличеством посадочных мест
 closest  # для поиска ближайшего бара
