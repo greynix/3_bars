@@ -1,44 +1,54 @@
-#!/usr/bin/env python3
 import json
 import argparse
-from math import radians, cos, sin, asin, sqrt
+from math import sqrt
 import os
 
 
 def load_data(path): 
-    """Open json file (cp1251)"""
-    if not os.path.exists(path):
-        raise FileNotFoundError('json file not found, please set correct file')   
     with open(path, encoding='cp1251') as json_file:
         return json.load(json_file)
 
 def get_biggest_bar(data):
-    """Some python magic"""
+    """
+    We find a bar with a maximum places.
+
+    This can be written as :
+    def some_function(each_bar):
+        return each_bar['SeatsCount']
+    return max(data, key=some_function)
+    """
+
     return max(data, key=lambda k: k['SeatsCount'])
 
 
 def get_smallest_bar(data):
-    """Some python magic"""
+    """
+    We find a bar with a minimum places.
+
+    This can be written as :
+    def some_function(each_bar):
+        return each_bar['SeatsCount']
+    return min(data, key=some_function)
+    """
+
     return min(data, key=lambda k: k['SeatsCount'])
 
 
 def get_closest_bar(data, longitude, latitude):
-    """ Haversine formula """
-    our_latitude = radians(latitude)
-    our_longitude = radians(longitude)
-    distance = None
-    for bar in data:
-        bar_latitude = radians(float(bar['Latitude_WGS84']))
-        bar_longitude = radians(float(bar['Longitude_WGS84']))
-        dist_longitude = our_longitude - bar_longitude
-        dist_latitude = our_latitude - bar_latitude 
-        a = sin(dist_latitude/2)**2 + cos(bar_latitude) * cos(our_latitude) * sin(dist_longitude/2)**2
-        c = 2 * asin(sqrt(a)) 
-        earth_radius = 6371 
-        if not distance or c * earth_radius < distance:
-            distance = c * earth_radius  
-            closest_bar = bar
-    return closest_bar
+    """
+    We find the nearest bar using Euclidian algorithm 
+    
+    Distance=sqrt((x1 - x2)**2 + (y1 - y2)**2), where:
+    x1 - longitude first bar
+    x1 - longitude second bar
+    y1 - latitude first bar
+    y2 - latitude second bar
+    sqrt - square root 
+    """
+
+    return min(data, key=lambda bar: \
+    sqrt((float(bar['Longitude_WGS84']) - float(longitude))**2 +\
+    (float(bar['Latitude_WGS84']) - float(latitude))**2))
 
 
 if __name__ == '__main__':
